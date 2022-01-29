@@ -11,7 +11,7 @@ Some of these scripts applies `lavamoat` to the build system, and some do not.
 For local development, building without `lavamoat` is faster and therefore preferable.
 
 The build system is not a full-featured CLI, but rather a script that expects some command line arguments and environment variables.
-For instructions regarding environment variables, see [the main repository readme](../../README.md#building-locally).
+For instructions regarding environment variables, see [the main repository readme](../../README-Metamask.md#building-locally).
 
 Generally speaking, the build system consists of [`gulp`](https://npmjs.com/package/gulp) tasks that either manipulate static assets or bundle source files using [Browserify](https://browserify.org/).
 Production-ready zip files are written to the `./builds` directory, while "unpacked" extension builds
