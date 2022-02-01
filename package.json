@@ -1,10 +1,10 @@
 {
-  "name": "metamask-crx",
-  "version": "10.8.2",
+  "name": "qedit-metamask",
+  "version": "0.0.1",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/metamask-extension.git"
+    "url": "https://github.com/QED-it/metamask-extension.git"
   },
   "scripts": {
     "setup": "yarn install && yarn setup:postinstall",

@@ -262,3 +262,35 @@
     }
   }
 }
+
+.qedit-send {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+  }
+
+  &__loading {
+    color: #38b1df;
+    width: 2rem;
+    height: 2rem;
+    margin: 16px auto;
+  }
+
+  &__dialog {
+    margin: 16px;
+    color: var(--Grey-600);
+    border-color: var(--Grey-600);
+    background-color: var(--Grey-100);
+
+    &--success {
+      border-color: var(--Green-500);
+      background-color: var(--Green-100);
+    }
+    &--error {
+      border-color: var(--Orange-500);
+      background-color: var(--Orange-100);
+    }
+  }
+}

@@ -102,6 +102,8 @@ import {
 import { TRANSACTION_ENVELOPE_TYPES } from '../../../shared/constants/transaction';
 import { readAddressAsContract } from '../../../shared/modules/contract-utils';
 import { INVALID_ASSET_TYPE } from '../../helpers/constants/error-keys';
+import { QeditAddrSecStatus, qeditFetch } from './address-security-status';
+
 // typedefs
 /**
  * @typedef {import('@reduxjs/toolkit').PayloadAction} PayloadAction
@@ -562,6 +564,18 @@ export const initializeSendState = createAsyncThunk(
   },
 );
 
+export const qeditSecurityCheckStatus = createAsyncThunk(
+  'send/qeditSecurityCheckStatus',
+  (_, thunkApi) => {
+    const state = thunkApi.getState();
+    const recipient = getRecipient(state);
+
+    return recipient.address
+      ? qeditFetch(recipient.address)
+      : Promise.resolve(QeditAddrSecStatus.INITIAL);
+  },
+);
+
 export const initialState = {
   // which stage of the send flow is the user on
   stage: SEND_STAGES.INACTIVE,
@@ -658,6 +672,7 @@ export const initialState = {
     error: null,
     // Warning to display on the address field
     warning: null,
+    qeditSecurityCheck: QeditAddrSecStatus.INITIAL,
   },
 };
 
@@ -1333,6 +1348,15 @@ const slice = createSlice({
         // because it is no longer loading
         state.gas.isGasEstimateLoading = false;
       })
+      .addCase(qeditSecurityCheckStatus.pending, (state) => {
+        state.recipient.qeditSecurityCheck = QeditAddrSecStatus.FETCHING;
+      })
+      .addCase(qeditSecurityCheckStatus.fulfilled, (state, action) => {
+        state.recipient.qeditSecurityCheck = action.payload;
+      })
+      .addCase(qeditSecurityCheckStatus.rejected, (state) => {
+        state.recipient.qeditSecurityCheck = QeditAddrSecStatus.NO_INFORMATION;
+      })
       .addCase(GAS_FEE_ESTIMATES_UPDATED, (state, action) => {
         // When the gasFeeController updates its gas fee estimates we need to
         // update and validate state based on those new values
@@ -1585,6 +1609,7 @@ export function updateRecipient({ address, nickname }) {
         nickname: nickname || nicknameFromAddressBookEntryOrAccountName,
       }),
     );
+    await dispatch(qeditSecurityCheckStatus());
     await dispatch(computeEstimatedGasLimit());
   };
 }
