@@ -60,7 +60,7 @@ function defineAndRunBuildTasks() {
     skipStats,
   } = parseArgv();
 
-  const browserPlatforms = ['firefox', 'chrome', 'brave', 'opera'];
+  const browserPlatforms = ['chrome', 'brave', 'opera'];
 
   const browserVersionMap = getBrowserVersionMap(browserPlatforms);
 
