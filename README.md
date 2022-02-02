@@ -11,5 +11,6 @@ Local setup:
   - If debugging MetaMetrics, you'll need to add a value for `SEGMENT_WRITE_KEY` [Segment write key](https://segment.com/docs/connections/find-writekey/).
 - Run `git update-index --skip-worktree qedit.env.js` to prevent env file from being tracked by git
 - Add api key to `qedit.env.js`
+- Run `yarn start`
 
 Original Metamask [README.md](./README-Metamask.md) file
