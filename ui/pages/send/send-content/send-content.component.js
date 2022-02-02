@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PageContainerContent from '../../../components/ui/page-container/page-container-content.component';
 import Dialog from '../../../components/ui/dialog';
+import Spinner from '../../../components/ui/spinner';
+import { QeditAddrSecStatus } from '../../../ducks/send/address-security-status';
 import NicknamePopovers from '../../../components/app/modals/nickname-popovers';
 import {
   ETH_GAS_PRICE_FETCH_WARNING_KEY,
@@ -38,6 +40,11 @@ export default class SendContent extends Component {
     asset: PropTypes.object,
     to: PropTypes.string,
     assetError: PropTypes.string,
+    recipient: PropTypes.shape({
+      address: PropTypes.string,
+      nickname: PropTypes.string,
+      qeditSecurityCheck: PropTypes.string,
+    }),
   };
 
   render() {
@@ -68,19 +75,23 @@ export default class SendContent extends Component {
 
     return (
       <PageContainerContent>
-        <div className="send-v2__form">
-          {assetError ? this.renderError(assetError) : null}
-          {gasError ? this.renderError(gasError) : null}
-          {isEthGasPrice
-            ? this.renderWarning(ETH_GAS_PRICE_FETCH_WARNING_KEY)
-            : null}
-          {error ? this.renderError(error) : null}
-          {warning ? this.renderWarning() : null}
-          {this.maybeRenderAddContact()}
-          <SendAssetRow />
-          <SendAmountRow />
-          {networkOrAccountNotSupports1559 ? <SendGasRow /> : null}
-          {showHexData ? <SendHexDataRow /> : null}
+        <div className="qedit-send__container ">
+          <div className="send-v2__form">
+            {assetError ? this.renderError(assetError) : null}
+            {gasError ? this.renderError(gasError) : null}
+            {isEthGasPrice
+              ? this.renderWarning(ETH_GAS_PRICE_FETCH_WARNING_KEY)
+              : null}
+            {error ? this.renderError(error) : null}
+            {warning ? this.renderWarning() : null}
+            {this.maybeRenderAddContact()}
+            <SendAssetRow />
+            <SendAmountRow />
+            {networkOrAccountNotSupports1559 ? <SendGasRow /> : null}
+            {showHexData ? <SendHexDataRow /> : null}
+          </div>
+
+          {this.renderCheckAddressInfo()}
         </div>
       </PageContainerContent>
     );
@@ -131,5 +142,34 @@ export default class SendContent extends Component {
         {t(error)}
       </Dialog>
     );
+  }
+
+  renderCheckAddressInfo() {
+    const { qeditSecurityCheck } = this.props.recipient;
+
+    switch (qeditSecurityCheck) {
+      case QeditAddrSecStatus.FETCHING:
+        return <Spinner className="qedit-send__loading" />;
+      case QeditAddrSecStatus.NO_INFORMATION:
+        return (
+          <Dialog className="qedit-send__dialog">
+            No information about the recipient.
+          </Dialog>
+        );
+      case QeditAddrSecStatus.NOT_SECURE:
+        return (
+          <Dialog className="qedit-send__dialog qedit-send__dialog--error">
+            The address is not secure.
+          </Dialog>
+        );
+      case QeditAddrSecStatus.SECURE:
+        return (
+          <Dialog className="qedit-send__dialog qedit-send__dialog--success">
+            The address is secure.
+          </Dialog>
+        );
+      default:
+        return null;
+    }
   }
 }

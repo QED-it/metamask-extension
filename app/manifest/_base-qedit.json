@@ -1,0 +1,79 @@
+{
+  "author": "https://qed-it.com",
+  "background": {
+    "page": "background.html",
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "images/qedit/app-icon/icon-16.png",
+      "19": "images/qedit/app-icon/icon-19.png",
+      "32": "images/qedit/app-icon/icon-32.png",
+      "38": "images/qedit/app-icon/icon-38.png",
+      "48": "images/qedit/app-icon/icon-48.png",
+      "64": "images/qedit/app-icon/icon-64.png",
+      "128": "images/qedit/app-icon/icon-128.png",
+      "512": "images/qedit/app-icon/icon-512.png"
+    },
+    "default_title": "Qedit MetaMask",
+    "default_popup": "popup.html"
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Alt+Shift+M",
+        "mac": "Alt+Shift+M",
+        "chromeos": "Alt+Shift+M",
+        "linux": "Alt+Shift+M"
+      }
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["file://*/*", "http://*/*", "https://*/*"],
+      "js": [
+        "qedit.env.js",
+        "disable-console.js",
+        "globalthis.js",
+        "lockdown-install.js",
+        "lockdown-run.js",
+        "lockdown-more.js",
+        "contentscript.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://connect.trezor.io/*/popup.html"],
+      "js": ["vendor/trezor/content-script.js"]
+    }
+  ],
+  "default_locale": "en",
+  "description": "__MSG_appDescription__",
+  "icons": {
+    "16": "images/qedit/app-icon/icon-16.png",
+    "19": "images/qedit/app-icon/icon-19.png",
+    "32": "images/qedit/app-icon/icon-32.png",
+    "38": "images/qedit/app-icon/icon-38.png",
+    "48": "images/qedit/app-icon/icon-48.png",
+    "64": "images/qedit/app-icon/icon-64.png",
+    "128": "images/qedit/app-icon/icon-128.png",
+    "512": "images/qedit/app-icon/icon-512.png"
+  },
+  "manifest_version": 2,
+  "name": "Qedit MetaMask",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "clipboardWrite",
+    "http://localhost:8545/",
+    "https://*.infura.io/",
+    "https://wallet.gridplus.io/*",
+    "activeTab",
+    "webRequest",
+    "*://*.eth/",
+    "notifications"
+  ],
+  "short_name": "Qedit MetaMask",
+  "web_accessible_resources": ["inpage.js", "phishing.html"]
+}

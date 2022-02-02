@@ -2,7 +2,8 @@ const { promises: fs } = require('fs');
 const path = require('path');
 const { mergeWith, cloneDeep } = require('lodash');
 
-const baseManifest = require('../../app/manifest/_base.json');
+// const baseManifest = require('../../app/manifest/_base.json');
+const baseManifest = require('../../app/manifest/_base-qedit.json');
 
 const { createTask, composeSeries } = require('./task');
 const { BuildType } = require('./utils');
