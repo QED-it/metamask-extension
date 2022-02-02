@@ -178,6 +178,10 @@ function getCopyTargets(shouldIncludeLockdown) {
       src: `./app/phishing.html`,
       dest: `phishing.html`,
     },
+    {
+      src: './qedit.env.js',
+      dest: 'qedit.env.js',
+    },
   ];
 
   const languageTags = new Set();

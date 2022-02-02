@@ -7,7 +7,33 @@ export const QeditAddrSecStatus = {
 };
 
 export function qeditFetch(address) {
-  return qeditFetchApiMock(address);
+  return qeditFetchApi(address);
+}
+
+function qeditFetchApi(address) {
+  return window
+    .fetch(
+      `https://metamask.qedit.io/default/metamask-query?accountId=${address}`,
+      {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': window.qedit.apiKey,
+        },
+      },
+    )
+    .then((response) => response.json())
+    .then((response) => {
+      switch (response.status) {
+        case 'safe':
+          return QeditAddrSecStatus.SECURE;
+        case 'scam':
+          return QeditAddrSecStatus.NOT_SECURE;
+        default:
+          return QeditAddrSecStatus.NO_INFORMATION;
+      }
+    });
 }
 
 function qeditFetchApiMock(address) {
@@ -24,6 +50,6 @@ function qeditFetchApiMock(address) {
           resolve(QeditAddrSecStatus.NO_INFORMATION);
           break;
       }
-    }, 3000);
+    }, 1500);
   });
 }
